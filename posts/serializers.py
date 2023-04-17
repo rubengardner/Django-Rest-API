@@ -8,6 +8,7 @@ class PostSerializer(serializers.ModelSerializer):
     profile_id = serializers.ReadOnlyField(source='owner.profile.id')
     profile_image = serializers.ReadOnlyField(source='owner.profile.image.url')
 
+# Validate fields: validate_<field name> is a django native function
     def validate_image(self, value):
         if value.size > 1024 * 1024 * 2:
             raise serializers.ValidationError(
@@ -30,6 +31,6 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = [
-            'id', 'owner', 'created_at', 'updated_at', 'title',
+            'id', 'owner', 'profile_image', 'profile_id', 'created_at', 'updated_at', 'title',
             'content', 'image', 'is_owner', 'image_filter'
         ]
