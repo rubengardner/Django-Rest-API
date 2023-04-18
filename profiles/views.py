@@ -21,6 +21,11 @@ class ProfileSpecific(APIView):
     serializer_class = ProfileSerializer
     permission_classes = [IsOwnerOrReadOnly]
 
+    def get(self, request, pk):
+        profile = self.get_individual_profile(pk)
+        serializer = ProfileSerializer(profile, context={'request':request})
+        return Response(serializer.data)
+
     def get_individual_profile(self, pk):
         try:
             profile = Profile.objects.get(pk=pk)
@@ -28,11 +33,6 @@ class ProfileSpecific(APIView):
             return profile
         except Profile.DoesNotExist:
             raise Http404
-
-    def get(self, request, pk):
-        profile = self.get_individual_profile(pk)
-        serializer = ProfileSerializer(profile, context={'request':request})
-        return Response(serializer.data)
 
     def put(self, request, pk):
         profile = self.get_individual_profile(pk)
